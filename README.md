@@ -72,6 +72,5 @@ MIT
 <sub>♞ <b>jugada</b> · your chess world, one menu away · part of the family:
 <a href="https://github.com/SethMed7/narrado">narrado</a> ·
 <a href="https://github.com/SethMed7/leelo">leelo</a> ·
-<a href="https://github.com/SethMed7/dictado">dictado</a> ·
 <a href="https://github.com/SethMed7/jugada">jugada</a></sub>
 </div>
