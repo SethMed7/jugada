@@ -11,6 +11,12 @@ mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp .build/release/Jugada "$APP/Contents/MacOS/Jugada"
 cp Info.plist "$APP/Contents/Info.plist"
 
+# Strip the debug symbol map. It embeds absolute build paths like
+# /Users/<you>/jugada/.build/.../*.swift.o, which would otherwise ship in the
+# public binary and leak your macOS username. Must run before codesign, since
+# modifying the binary invalidates any signature.
+strip -S "$APP/Contents/MacOS/Jugada"
+
 # App icon: media/icon.png (1024px) -> jugada.icns, when present.
 if [ -f media/icon.png ]; then
   ICONSET="build/jugada.iconset"
