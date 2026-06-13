@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 256 256">
+  <!-- jugada: your chess world, one menu away. Sibling of narrado + leelo.
+       Brand: dusk blue #5681b5 / #7fb0dc on #161616. -->
+  <rect width="256" height="256" fill="#161616"/>
+  <!-- knight silhouette; fill+stroke same color with round joins = rounded geometry -->
+  <path d="M100 178
+           C 100 144 106 124 88 116
+           L 68 122
+           C 56 124 50 112 58 104
+           L 94 78
+           C 98 62 110 52 124 50
+           L 132 36
+           L 146 52
+           C 172 62 188 94 188 130
+           C 188 150 184 164 180 178
+           Z"
+        fill="#5681b5" stroke="#5681b5" stroke-width="14"
+        stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- eye -->
+  <circle cx="106" cy="92" r="9" fill="#161616"/>
+  <!-- base bar: the single light accent -->
+  <rect x="62" y="198" width="132" height="18" rx="9" fill="#7fb0dc"/>
+</svg>

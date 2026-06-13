@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<style>
+  html, body { margin: 0; padding: 0; }
+  .stage {
+    width: 900px; height: 720px; background: #161616;
+    position: relative; overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  .glow {
+    position: absolute; inset: 0;
+    background: radial-gradient(680px 480px at 50% 16%, rgba(86, 129, 181, 0.13), transparent 70%);
+  }
+  /* mock macOS menu bar */
+  .menubar {
+    position: relative; height: 40px;
+    background: rgba(34, 35, 38, 0.92); border-bottom: 1px solid #2c2d31;
+    display: flex; align-items: center; justify-content: flex-end;
+    gap: 24px; padding: 0 26px; color: #c9ced6; font-size: 14.5px;
+  }
+  .menubar .item { opacity: 0.7; }
+  .menubar .crown {
+    display: flex; align-items: center; height: 30px; padding: 0 9px;
+    background: rgba(86, 129, 181, 0.32); border-radius: 6px; opacity: 1;
+  }
+  /* the open menu */
+  .menu {
+    position: absolute; top: 44px; right: 142px; width: 372px;
+    background: rgba(33, 34, 38, 0.97); border: 1px solid #3a3d43;
+    border-radius: 11px; padding: 6px;
+    box-shadow: 0 22px 56px rgba(0, 0, 0, 0.55), 0 2px 10px rgba(0, 0, 0, 0.4);
+    font-size: 14.5px; color: #d7dce4;
+  }
+  .row {
+    display: flex; align-items: baseline; gap: 8px;
+    padding: 7px 12px; border-radius: 6px; white-space: nowrap;
+  }
+  .row .dim { color: #8b94a3; font-size: 13px; }
+  .row.hl { background: #5681b5; color: #fff; }
+  .row.hl .dim { color: #d9e6f4; }
+  .header {
+    padding: 7px 12px 3px; font-size: 11.5px; font-weight: 600;
+    letter-spacing: 0.07em; color: #7b8290; text-transform: uppercase;
+  }
+  hr { border: none; border-top: 1px solid #3a3d43; margin: 5px 10px; }
+  .dot { color: #7fb0dc; }
+  .caption {
+    position: absolute; bottom: 34px; left: 0; right: 0; text-align: center;
+    font: 500 16px/1 ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+    color: #5f6671;
+  }
+  .caption b { color: #7fb0dc; font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="glow"></div>
+
+  <div class="menubar">
+    <span class="crown">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M3.5 8.5 L6.6 12 L12 5.5 L17.4 12 L20.5 8.5 L19 17 L5 17 Z"
+              fill="#edf1f6" stroke="#edf1f6" stroke-width="1.4" stroke-linejoin="round"/>
+      </svg>
+    </span>
+    <span class="item">Wed Jun 10</span>
+    <span class="item">9:41 AM</span>
+  </div>
+
+  <div class="menu">
+    <div class="row hl"><span>Daily puzzle</span><span class="dim">· rating 2143 · fork, middlegame</span></div>
+    <hr />
+    <div class="header">Live events</div>
+    <div class="row"><span class="dot">●</span><span>Tata Steel Masters — Round 6</span></div>
+    <div class="row"><span class="dot">●</span><span>Norway Chess 2026 — Round 3</span></div>
+    <div class="row"><span class="dot">●</span><span>Sharjah Masters — Round 8</span></div>
+    <hr />
+    <div class="header">Heroes</div>
+    <div class="row"><span>magnuscarlsen</span><span class="dim">· last seen 2h ago</span></div>
+    <div class="row"><span>hikaru</span><span class="dim">· last seen 14m ago</span></div>
+    <hr />
+    <div class="row">Watch Lichess TV</div>
+    <div class="row">Refresh</div>
+    <hr />
+    <div class="row">Quit Jugada</div>
+  </div>
+
+  <svg width="380" height="380" viewBox="0 0 256 256"
+       style="position:absolute; left:42px; bottom:36px; opacity:0.10">
+    <path d="M100 178 C 100 144 106 124 88 116 L 68 122 C 56 124 50 112 58 104 L 94 78 C 98 62 110 52 124 50 L 132 36 L 146 52 C 172 62 188 94 188 130 C 188 150 184 164 180 178 Z"
+          fill="#5681b5" stroke="#5681b5" stroke-width="14" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="106" cy="92" r="9" fill="#161616"/>
+    <rect x="62" y="198" width="132" height="18" rx="9" fill="#7fb0dc"/>
+  </svg>
+
+  <p class="caption">a crown in your menu bar · refreshes every <b>5 min</b> · everything opens in your browser</p>
+</div>
+</body>
+</html>
