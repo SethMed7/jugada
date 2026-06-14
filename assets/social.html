@@ -3,58 +3,58 @@
 <head>
 <meta charset="utf-8" />
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap');
   html, body { margin: 0; padding: 0; }
   .card {
-    width: 1280px; height: 640px; background: #161616;
+    width: 1280px; height: 640px; background: #12271C;
     position: relative; overflow: hidden;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
   }
   .glow {
     position: absolute; inset: 0;
-    background: radial-gradient(820px 520px at 50% 38%, rgba(86, 129, 181, 0.18), transparent 68%);
+    background: radial-gradient(860px 540px at 50% 36%, rgba(221, 169, 74, 0.14), transparent 68%);
   }
-  .lockup { display: flex; align-items: center; gap: 34px; z-index: 1; }
-  h1 { margin: 0; font-size: 124px; font-weight: 700; letter-spacing: -0.035em; color: #edf1f6; }
+  .lockup { display: flex; align-items: center; gap: 36px; z-index: 1; }
+  h1 { margin: 0; font-family: 'Playfair Display', serif; font-size: 134px; font-weight: 700; letter-spacing: -0.012em; color: #F1E9D7; }
   .tagline {
-    margin: 26px 0 0; z-index: 1;
-    font: 500 30px/1 ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
-    color: #7fb0dc;
+    margin: 30px 0 0; z-index: 1;
+    font-family: 'Playfair Display', serif; font-style: italic; font-weight: 500;
+    font-size: 34px; color: #DDA94A;
   }
-  .sub { margin: 22px 0 0; z-index: 1; font-size: 24px; font-weight: 500; color: #8b94a3; }
-  .sub b { color: #c3cdd9; font-weight: 600; }
-  /* board-rank motif along the bottom, like leelo's waveform */
-  .rank {
-    position: absolute; bottom: -22px; left: 0; right: 0;
-    display: flex; justify-content: center; gap: 14px;
+  .sub { margin: 22px 0 0; z-index: 1; font-size: 24px; font-weight: 500; color: #93A697; }
+  .sub b { color: #D9CDB4; font-weight: 600; }
+  .board {
+    position: absolute; bottom: -30px; left: 0; right: 0; height: 130px;
+    display: flex; align-items: flex-end; justify-content: center; gap: 14px;
   }
-  .sq { width: 56px; height: 56px; border-radius: 13px; }
+  .sq { width: 64px; height: 64px; border-radius: 14px; }
 </style>
 </head>
 <body>
 <div class="card">
   <div class="glow"></div>
   <div class="lockup">
-    <svg width="150" height="150" viewBox="0 0 256 256">
+    <svg width="158" height="158" viewBox="0 0 256 256">
       <path d="M100 178 C 100 144 106 124 88 116 L 68 122 C 56 124 50 112 58 104 L 94 78 C 98 62 110 52 124 50 L 132 36 L 146 52 C 172 62 188 94 188 130 C 188 150 184 164 180 178 Z"
-            fill="#5681b5" stroke="#5681b5" stroke-width="14" stroke-linejoin="round" stroke-linecap="round"/>
-      <circle cx="106" cy="92" r="9" fill="#161616"/>
-      <rect x="62" y="198" width="132" height="18" rx="9" fill="#7fb0dc"/>
+            fill="#DDA94A" stroke="#DDA94A" stroke-width="14" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="106" cy="92" r="9" fill="#12271C"/>
+      <rect x="62" y="198" width="132" height="18" rx="9" fill="#E7DCC2"/>
     </svg>
     <h1>jugada</h1>
   </div>
   <p class="tagline">your chess world, one menu away.</p>
-  <p class="sub">daily puzzles, live broadcasts &amp; your heroes — in the <b>macOS</b> menu bar</p>
-  <div class="rank" id="rank"></div>
+  <p class="sub">the daily puzzle, live broadcasts &amp; your heroes — in the <b>macOS</b> menu bar</p>
+  <div class="board" id="board"></div>
   <script>
-    const rank = document.getElementById("rank");
-    for (let i = 0; i < 18; i++) {
+    const board = document.getElementById("board");
+    for (let i = 0; i < 13; i++) {
       const s = document.createElement("div");
       s.className = "sq";
-      s.style.background = i % 2 ? "#7fb0dc" : "#5681b5";
-      const edge = Math.min(i, 17 - i);
-      s.style.opacity = Math.min(0.5, 0.06 + edge * 0.055).toFixed(2);
-      rank.append(s);
+      s.style.background = i % 2 ? "#E7DCC2" : "#DDA94A";
+      const edge = Math.min(i, 12 - i);
+      s.style.opacity = Math.min(0.5, 0.08 + edge * 0.07).toFixed(2);
+      board.append(s);
     }
   </script>
 </div>

@@ -3,25 +3,26 @@
 <head>
 <meta charset="utf-8" />
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600&display=swap');
   html, body { margin: 0; padding: 0; }
   .banner {
-    width: 1600px; height: 400px; background: #161616;
+    width: 1600px; height: 400px; background: #12271C;
     position: relative; overflow: hidden;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
   .glow {
     position: absolute; inset: 0;
-    background: radial-gradient(900px 460px at 22% 45%, rgba(86, 129, 181, 0.16), transparent 65%);
+    background: radial-gradient(940px 480px at 22% 45%, rgba(221, 169, 74, 0.12), transparent 64%);
   }
-  .mark { position: absolute; left: 100px; top: 50%; transform: translateY(-50%); }
-  .text { position: absolute; left: 318px; top: 50%; transform: translateY(-52%); }
-  h1 { margin: 0; font-size: 108px; font-weight: 700; letter-spacing: -0.035em; color: #edf1f6; }
+  .mark { position: absolute; left: 104px; top: 50%; transform: translateY(-50%); }
+  .text { position: absolute; left: 322px; top: 50%; transform: translateY(-53%); }
+  h1 { margin: 0; font-family: 'Playfair Display', serif; font-size: 118px; font-weight: 700; letter-spacing: -0.012em; color: #F1E9D7; }
   p {
-    margin: 12px 0 0 4px;
-    font: 500 27px/1 ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
-    color: #7fb0dc;
+    margin: 14px 0 0 4px;
+    font-family: 'Playfair Display', serif; font-style: italic; font-weight: 500;
+    font-size: 30px; color: #DDA94A; letter-spacing: 0.005em;
   }
-  /* board-corner motif: rounded checker squares fading off the right edge */
+  /* board-corner motif: rounded squares fading off the right edge */
   .board {
     position: absolute; right: -36px; top: 50%; transform: translateY(-50%) rotate(-8deg);
     display: grid; grid-template-columns: repeat(5, 88px); grid-auto-rows: 88px; gap: 14px;
@@ -33,11 +34,11 @@
 <div class="banner">
   <div class="glow"></div>
   <div class="mark">
-    <svg width="180" height="180" viewBox="0 0 256 256">
+    <svg width="182" height="182" viewBox="0 0 256 256">
       <path d="M100 178 C 100 144 106 124 88 116 L 68 122 C 56 124 50 112 58 104 L 94 78 C 98 62 110 52 124 50 L 132 36 L 146 52 C 172 62 188 94 188 130 C 188 150 184 164 180 178 Z"
-            fill="#5681b5" stroke="#5681b5" stroke-width="14" stroke-linejoin="round" stroke-linecap="round"/>
-      <circle cx="106" cy="92" r="9" fill="#161616"/>
-      <rect x="62" y="198" width="132" height="18" rx="9" fill="#7fb0dc"/>
+            fill="#DDA94A" stroke="#DDA94A" stroke-width="14" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="106" cy="92" r="9" fill="#12271C"/>
+      <rect x="62" y="198" width="132" height="18" rx="9" fill="#E7DCC2"/>
     </svg>
   </div>
   <div class="text">
@@ -52,9 +53,8 @@
         const s = document.createElement("div");
         s.className = "sq";
         const dark = (r + c) % 2 === 0;
-        s.style.background = dark ? "#5681b5" : "#7fb0dc";
-        // fade toward the left so the board dissolves into the banner
-        const o = Math.max(0.04, (c - 1) * 0.085 + (dark ? 0.06 : 0.02));
+        s.style.background = dark ? "#DDA94A" : "#E7DCC2";
+        const o = Math.max(0.04, (c - 1) * 0.085 + (dark ? 0.07 : 0.03));
         s.style.opacity = o.toFixed(2);
         board.append(s);
       }

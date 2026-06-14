@@ -2,23 +2,23 @@
 
 ![jugada — your chess world, one menu away.](assets/banner.png)
 
-**jugada** — Spanish for *"the move"* (a play in chess). A tiny chess companion that
-lives in your macOS menu bar: the daily puzzle, live broadcasts, and your chess heroes —
-one click away, all day.
+**A tiny chess companion for the macOS menu bar** — the daily puzzle, live broadcasts,
+and your chess heroes, one click away, all day. No accounts, no keys, no tracking.
 
-[![Release](https://img.shields.io/github/v/release/SethMed7/jugada?color=5681b5&label=release)](https://github.com/SethMed7/jugada/releases/latest)
-[![License: MIT](https://img.shields.io/badge/license-MIT-7fb0dc)](LICENSE)
-[![Platform](https://img.shields.io/badge/macOS-13%2B-161616)](#install)
-[![Data](https://img.shields.io/badge/data-lichess.org%20%C2%B7%20chess.com-5681b5)](#features)
+[![Release](https://img.shields.io/github/v/release/SethMed7/jugada?color=DDA94A&label=release)](https://github.com/SethMed7/jugada/releases/latest)
+[![License: MIT](https://img.shields.io/badge/license-MIT-DDA94A)](LICENSE)
+[![Platform](https://img.shields.io/badge/macOS-13%2B-12271C)](#install)
+[![Data](https://img.shields.io/badge/data-lichess.org%20%C2%B7%20chess.com-DDA94A)](#features)
 
 </div>
 
-Jugada puts a crown ♔ in your menu bar. Click it and your chess world unfolds: today's
-lichess puzzle with its rating and themes, the official broadcasts happening right now,
-and when your favorite players were last online. Everything opens in your browser; the
-menu refreshes itself every five minutes. Sibling of
-[narrado](https://github.com/SethMed7/narrado) and
-[leelo](https://github.com/SethMed7/leelo) — same family, different board.
+**jugada** — Spanish for *"the move."* It puts a crown ♔ in your menu bar; click it and the
+board unfolds: today's [lichess](https://lichess.org) puzzle with its rating and themes, the
+official broadcasts playing right now, when your favorite players were last online, and a
+one-click ticket to Lichess TV. Everything opens in your browser. The menu refreshes itself
+every five minutes. No login, nothing to configure to start. Part of a small family —
+sibling of [narrado](https://github.com/SethMed7/narrado) and
+[leelo](https://github.com/SethMed7/leelo) — same craft, a different board.
 
 ## How it works
 
@@ -26,26 +26,25 @@ menu refreshes itself every five minutes. Sibling of
 
 ## Features
 
-- **Daily puzzle** — rating + themes at a glance; one click opens
+- **Daily puzzle** — rating and themes at a glance; one click opens
   [lichess training](https://lichess.org/training/daily)
 - **Live events** — up to five official lichess broadcasts (Tata Steel, Norway Chess…),
-  each a click from the live board
-- **Heroes** — your favorite chess.com players and when they were last seen online;
-  pick them in `~/.jugada/config.json`
+  each one click from the live board
+- **Heroes** — your favorite chess.com players and when they were last seen; choose them
+  in `~/.jugada/config.json`
 - **Watch Lichess TV** — the best game on lichess, instantly
-- **Self-refreshing** — every 5 minutes, plus a manual **Refresh**; sections degrade
-  gracefully when offline
-- **Private by design** — no accounts, no keys, no tracking; talks only to
-  `lichess.org` and `api.chess.com`
+- **Self-refreshing** — every 5 minutes, plus a manual **Refresh**; each section degrades
+  gracefully when you're offline
+- **Private by design** — no accounts, no keys, no tracking; talks only to `lichess.org`
+  and `api.chess.com`
 
 ## Install
 
 1. Download `Jugada-x.y.z.zip` from [Releases](https://github.com/SethMed7/jugada/releases/latest),
-   unzip, drag **Jugada.app** to Applications, and open it.
-   The app is ad-hoc signed; if macOS complains, run:
-   `xattr -d com.apple.quarantine /Applications/Jugada.app` (or right-click → Open).
-2. That's it. **Permissions: none.** No accounts, no keys; jugada talks only to
-   `lichess.org` and `api.chess.com`.
+   unzip, drag **Jugada.app** to Applications, and open it. The app is ad-hoc signed; if macOS
+   complains, run `xattr -dr com.apple.quarantine /Applications/Jugada.app` (or right-click → Open).
+2. That's it — **no permissions to grant.** jugada talks only to `lichess.org` and
+   `api.chess.com`.
 
 To follow your own heroes, edit `~/.jugada/config.json` (created on first run):
 
@@ -69,9 +68,8 @@ Brand assets are authored as HTML/SVG in `assets/` and rendered with
 MIT
 
 <div align="center">
-<sub>♞ <b>jugada</b> · your chess world, one menu away · part of the family:
-<a href="https://github.com/SethMed7/narrado">narrado</a> ·
+<sub>♞ <b>jugada</b> · brass on board-green · your chess world, one menu away · part of the
+family: <a href="https://github.com/SethMed7/narrado">narrado</a> ·
 <a href="https://github.com/SethMed7/leelo">leelo</a> ·
-<a href="https://github.com/SethMed7/dictado">dictado</a> ·
-<b>jugada</b></sub>
+<a href="https://github.com/SethMed7/dictado">dictado</a></sub>
 </div>
