@@ -25,10 +25,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCent
         }
         model.onRefresh = { [weak self] in self?.refresh() }
         model.onQuit = { NSApp.terminate(nil) }
-        model.puzzleSource = Config.load().puzzleSource ?? "lichess"
-        model.onSetPuzzleSource = { [weak self] source in
-            Config.setPuzzleSource(source)
-            self?.model.puzzleSource = source
+        model.source = Config.load().effectiveSource
+        model.onSetSource = { [weak self] value in
+            Config.setSource(value)
+            self?.model.source = value
             self?.refresh()
         }
 

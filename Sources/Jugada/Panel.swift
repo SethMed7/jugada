@@ -4,11 +4,11 @@ import SwiftUI
 /// the closures route row taps back to AppKit (open URL / refresh / quit).
 final class PanelModel: ObservableObject {
     @Published var snapshot: Snapshot?
-    @Published var puzzleSource: String = "lichess"   // drives the settings toggle
+    @Published var source: String = "lichess"   // drives the source toggle (whole app)
     var onOpen: (String) -> Void = { _ in }
     var onRefresh: () -> Void = {}
     var onQuit: () -> Void = {}
-    var onSetPuzzleSource: (String) -> Void = { _ in }
+    var onSetSource: (String) -> Void = { _ in }
 }
 
 // jugada brand: brass gold on deep board-green.
@@ -38,7 +38,7 @@ struct PanelView: View {
             VStack(alignment: .leading, spacing: 1) {
                 puzzleRow
                 divider
-                Header("Live events")
+                Header(isLichess ? "Live events" : "Live streamers")
                 eventsRows
                 divider
                 Header("Heroes")
@@ -62,16 +62,16 @@ struct PanelView: View {
     }
 
     private var isLichess: Bool {
-        let s = model.puzzleSource.lowercased()
+        let s = model.source.lowercased()
         return s != "chess.com" && s != "chesscom"
     }
 
     private var settingsRow: some View {
         HStack(spacing: 7) {
-            Text("Puzzle").font(.system(size: 12.5)).foregroundColor(.jSage)
+            Text("Source").font(.system(size: 12.5)).foregroundColor(.jSage)
             Spacer(minLength: 8)
-            SourceChip(label: "lichess", selected: isLichess) { model.onSetPuzzleSource("lichess") }
-            SourceChip(label: "chess.com", selected: !isLichess) { model.onSetPuzzleSource("chess.com") }
+            SourceChip(label: "lichess", selected: isLichess) { model.onSetSource("lichess") }
+            SourceChip(label: "chess.com", selected: !isLichess) { model.onSetSource("chess.com") }
         }
         .padding(.horizontal, 10).padding(.vertical, 5)
     }
@@ -100,8 +100,8 @@ struct PanelView: View {
         switch model.snapshot?.heroes {
         case .success(let heroes):
             ForEach(Array(heroes.enumerated()), id: \.offset) { _, hero in
-                if let lastSeen = hero.lastSeen, let url = hero.url {
-                    Row(title: hero.username, detail: "· last seen \(lastSeen)") { model.onOpen(url) }
+                if let status = hero.status, let url = hero.url {
+                    Row(title: hero.username, detail: "· \(status)") { model.onOpen(url) }
                 } else {
                     Row(title: hero.username, detail: "· offline", enabled: false) {}
                 }

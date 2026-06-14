@@ -27,14 +27,16 @@ to configure to start. Part of a small family — sibling of
 
 ## Features
 
-- **Daily puzzle** — from **lichess** (rating + themes) or **chess.com**; flip the source
-  right in the panel (a **Puzzle** toggle near the bottom); one click opens it
-- **Live events** — up to five official lichess broadcasts (Tata Steel, Norway Chess…),
-  each one click from the live board
-- **Live-event alerts** — a macOS notification the moment a new broadcast goes live; click
-  the banner to jump straight to the board
-- **Heroes** — your favorite chess.com players and when they were last seen; choose them
-  in `~/.jugada/config.json`
+- **One source, your pick** — flip the **Source** toggle near the bottom of the panel to run
+  the whole app on **lichess** or **chess.com**; the puzzle, the live section, and your tracked
+  players all switch together (never a mix)
+- **Daily puzzle** — lichess (rating + themes) or chess.com (today's title); one click opens it
+- **Live** — lichess broadcasts (Tata Steel, Norway Chess…), or who's **streaming live** on
+  chess.com; each one click away
+- **Live-event alerts** — a macOS notification the moment something new goes live; click the
+  banner to jump straight to it
+- **Heroes** — the players you track (set in `~/.jugada/config.json`): their **online status**
+  on lichess, or **last-seen time** on chess.com
 - **Watch Lichess TV** — the best game on lichess, instantly
 - **A themed panel** — board-green with brass-gold highlights, not a plain system menu
 - **Self-refreshing** — every 5 minutes, plus a manual **Refresh**; each section degrades
@@ -53,18 +55,19 @@ to configure to start. Part of a small family — sibling of
 On first run, the first time a new broadcast goes live you'll get a **notification**; macOS
 asks for permission once.
 
-To follow your own heroes — or switch the puzzle source — edit `~/.jugada/config.json`
-(created on first run):
+To follow your own players — or switch the source — edit `~/.jugada/config.json` (created on
+first run):
 
 ```json
 {
   "heroes": ["magnuscarlsen", "hikaru"],
-  "puzzleSource": "lichess"
+  "source": "lichess"
 }
 ```
 
-Set `"puzzleSource"` to `"chess.com"` to use chess.com's daily puzzle instead of lichess —
-or just use the **Puzzle** toggle near the bottom of the panel, which writes this for you.
+Set `"source"` to `"chess.com"` to run the whole app on chess.com instead — or just use the
+**Source** toggle near the bottom of the panel, which writes it for you. Heroes are looked up
+on the active platform, so list each player's lichess / chess.com handle accordingly.
 
 ## Development
 

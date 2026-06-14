@@ -5,9 +5,9 @@ import AppKit
 //   Snapshot { puzzle: Result<Puzzle, Error>
 //              broadcasts: Result<[Broadcast], Error>
 //              heroes: Result<[Hero], Error> }
-//   Puzzle    { rating: Int, themes: [String] }
+//   Puzzle    { title: String, detail: String, url: String }
 //   Broadcast { name: String, url: String }
-//   Hero      { username: String, lastSeen: String?, url: String? }   // lastSeen nil = that hero's fetch failed
+//   Hero      { username: String, status: String?, url: String? }   // status nil = that hero's fetch failed
 
 func sectionFailed<T>(_ result: Result<T, Error>) -> Bool {
     if case .failure = result { return true }
@@ -15,8 +15,8 @@ func sectionFailed<T>(_ result: Result<T, Error>) -> Bool {
 }
 
 func heroLine(_ hero: Hero) -> String {
-    guard let lastSeen = hero.lastSeen else { return "\(hero.username) · — offline" }
-    return "\(hero.username) · last seen \(lastSeen)"
+    guard let status = hero.status else { return "\(hero.username) · offline" }
+    return "\(hero.username) · \(status)"
 }
 
 func checkText(_ snapshot: Snapshot) -> String {
@@ -45,7 +45,7 @@ func checkText(_ snapshot: Snapshot) -> String {
 }
 
 if CommandLine.arguments.contains("--version") {
-    print("0.1.4")
+    print("0.1.5")
     exit(0)
 }
 
