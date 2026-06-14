@@ -23,7 +23,7 @@ func checkText(_ snapshot: Snapshot) -> String {
     var lines: [String] = []
     switch snapshot.puzzle {
     case .success(let p):
-        lines.append("Daily puzzle · rating \(p.rating) · \(p.themes.joined(separator: ", "))")
+        lines.append("\(p.title) · \(p.detail)")
     case .failure:
         lines.append("Daily puzzle · — offline")
     }
@@ -45,7 +45,7 @@ func checkText(_ snapshot: Snapshot) -> String {
 }
 
 if CommandLine.arguments.contains("--version") {
-    print("0.1.0")
+    print("0.1.2")
     exit(0)
 }
 

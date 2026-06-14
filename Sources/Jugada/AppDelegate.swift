@@ -1,24 +1,59 @@
 import AppKit
+import SwiftUI
+import UserNotifications
 
-final class AppDelegate: NSObject, NSApplicationDelegate {
+final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDelegate {
     private var statusItem: NSStatusItem!
     private var timer: Timer?
     private var isRefreshing = false // main-thread only; guards overlapping refreshes
+    private let popover = NSPopover()
+    private let model = PanelModel()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         if let button = statusItem.button {
             button.image = NSImage(systemSymbolName: "crown", accessibilityDescription: "Jugada")
                 ?? NSImage(systemSymbolName: "circle.grid.3x3", accessibilityDescription: "Jugada")
+            button.action = #selector(togglePopover)
+            button.target = self
         }
-        statusItem.menu = buildMenu(snapshot: nil)
 
-        // .common run-loop mode so the 5-minute refresh fires even while a menu is open.
+        // Route the themed panel's taps back to AppKit.
+        model.onOpen = { [weak self] urlString in
+            if let url = URL(string: urlString) { NSWorkspace.shared.open(url) }
+            self?.popover.performClose(nil)
+        }
+        model.onRefresh = { [weak self] in self?.refresh() }
+        model.onQuit = { NSApp.terminate(nil) }
+
+        popover.behavior = .transient
+        popover.animates = true
+        let hosting = NSHostingController(rootView: PanelView(model: model))
+        hosting.sizingOptions = [.preferredContentSize]
+        popover.contentViewController = hosting
+        if let dark = NSAppearance(named: .vibrantDark) { popover.appearance = dark }
+
+        UNUserNotificationCenter.current().delegate = self
+        Notifier.requestAuth()
+
+        // .common run-loop mode so the 5-minute refresh fires even while the
+        // popover is open (and notifications still arrive while it's closed).
         let t = Timer(timeInterval: 300, repeats: true) { [weak self] _ in self?.refresh() }
         RunLoop.main.add(t, forMode: .common)
         timer = t
 
         refresh()
+    }
+
+    @objc private func togglePopover() {
+        guard let button = statusItem.button else { return }
+        if popover.isShown {
+            popover.performClose(nil)
+        } else {
+            NSApp.activate(ignoringOtherApps: true)
+            popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
+            refresh() // freshen the panel each time it opens
+        }
     }
 
     @objc func refresh() {
@@ -27,101 +62,30 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         Task {
             let snapshot = await Feeds.snapshot()
             await MainActor.run {
-                // Assign a fresh menu; never mutate the live one while it may be tracking.
-                self.statusItem.menu = self.buildMenu(snapshot: snapshot)
+                self.model.snapshot = snapshot
+                if case .success(let tours) = snapshot.broadcasts { Notifier.handle(tours) }
                 self.isRefreshing = false
             }
         }
     }
 
-    // MARK: menu
+    // MARK: notifications
 
-    private func buildMenu(snapshot: Snapshot?) -> NSMenu {
-        let menu = NSMenu()
-        menu.autoenablesItems = false
-
-        switch snapshot?.puzzle {
-        case .success(let p):
-            menu.addItem(link("Daily puzzle · rating \(p.rating) · \(p.themes.joined(separator: ", "))",
-                              url: "https://lichess.org/training/daily"))
-        case .failure:
-            menu.addItem(header("Daily puzzle"))
-            menu.addItem(offlineItem())
-        case nil:
-            menu.addItem(header("Daily puzzle"))
-            menu.addItem(disabled("Loading…"))
+    // Tapping a live-event banner opens its board.
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+        if let urlString = response.notification.request.content.userInfo["url"] as? String,
+           let url = URL(string: urlString) {
+            NSWorkspace.shared.open(url)
         }
-
-        menu.addItem(.separator())
-        menu.addItem(header("Live events"))
-        switch snapshot?.broadcasts {
-        case .success(let tours) where !tours.isEmpty:
-            for tour in tours.prefix(5) {
-                menu.addItem(link(tour.name, url: tour.url))
-            }
-        case .success:
-            menu.addItem(disabled("No live events"))
-        case .failure:
-            menu.addItem(offlineItem())
-        case nil:
-            menu.addItem(disabled("Loading…"))
-        }
-
-        menu.addItem(.separator())
-        menu.addItem(header("Heroes"))
-        switch snapshot?.heroes {
-        case .success(let heroes):
-            for hero in heroes {
-                if let lastSeen = hero.lastSeen, let url = hero.url {
-                    menu.addItem(link("\(hero.username) · last seen \(lastSeen)", url: url))
-                } else {
-                    menu.addItem(disabled("\(hero.username) · — offline"))
-                }
-            }
-        case .failure:
-            menu.addItem(offlineItem())
-        case nil:
-            menu.addItem(disabled("Loading…"))
-        }
-
-        menu.addItem(.separator())
-        menu.addItem(link("Watch Lichess TV", url: "https://lichess.org/tv"))
-        menu.addItem(.separator())
-        let refreshItem = NSMenuItem(title: "Refresh", action: #selector(refresh), keyEquivalent: "r")
-        refreshItem.target = self
-        menu.addItem(refreshItem)
-        menu.addItem(NSMenuItem(title: "Quit Jugada",
-                                action: #selector(NSApplication.terminate(_:)),
-                                keyEquivalent: "q"))
-        return menu
+        completionHandler()
     }
 
-    private func header(_ title: String) -> NSMenuItem {
-        let item = NSMenuItem(title: title, action: nil, keyEquivalent: "")
-        item.isEnabled = false
-        return item
-    }
-
-    private func disabled(_ title: String) -> NSMenuItem {
-        let item = NSMenuItem(title: title, action: nil, keyEquivalent: "")
-        item.isEnabled = false
-        return item
-    }
-
-    private func offlineItem() -> NSMenuItem {
-        disabled("— offline")
-    }
-
-    private func link(_ title: String, url: String) -> NSMenuItem {
-        let item = NSMenuItem(title: title, action: #selector(open(_:)), keyEquivalent: "")
-        item.target = self
-        item.representedObject = url
-        return item
-    }
-
-    @objc private func open(_ sender: NSMenuItem) {
-        guard let string = sender.representedObject as? String,
-              let url = URL(string: string) else { return }
-        NSWorkspace.shared.open(url)
+    // Show the banner even though jugada runs as a menu-bar accessory.
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.banner, .sound])
     }
 }

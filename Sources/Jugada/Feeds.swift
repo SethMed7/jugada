@@ -3,8 +3,9 @@ import Foundation
 // MARK: - Display models
 
 public struct Puzzle {
-    public let rating: Int
-    public let themes: [String]
+    public let title: String    // "Daily puzzle"
+    public let detail: String   // "rating 1746 · endgame, sacrifice" (lichess) or the chess.com title
+    public let url: String
 }
 
 public struct Broadcast {
@@ -33,14 +34,15 @@ public enum Feeds {
     private static let userAgent = "jugada/0.1 (github.com/SethMed7/jugada)"
 
     public static func snapshot() async -> Snapshot {
-        async let puzzle = safePuzzle()
+        let cfg = Config.load()
+        async let puzzle = safePuzzle(source: cfg.puzzleSource ?? "lichess")
         async let broadcasts = safeBroadcasts()
-        async let heroes = safeHeroes(Config.load().heroes)
+        async let heroes = safeHeroes(cfg.heroes)
         return await Snapshot(puzzle: puzzle, broadcasts: broadcasts, heroes: heroes)
     }
 
-    private static func safePuzzle() async -> Result<Puzzle, Error> {
-        do { return .success(try await dailyPuzzle()) } catch { return .failure(error) }
+    private static func safePuzzle(source: String) async -> Result<Puzzle, Error> {
+        do { return .success(try await dailyPuzzle(source: source)) } catch { return .failure(error) }
     }
 
     private static func safeBroadcasts() async -> Result<[Broadcast], Error> {
@@ -66,10 +68,33 @@ public enum Feeds {
         let puzzle: Inner
     }
 
-    static func dailyPuzzle() async throws -> Puzzle {
+    static func dailyPuzzle(source: String = "lichess") async throws -> Puzzle {
+        let s = source.lowercased()
+        if s == "chess.com" || s == "chesscom" { return try await chessComPuzzle() }
+        return try await lichessPuzzle()
+    }
+
+    static func lichessPuzzle() async throws -> Puzzle {
         let data = try await get(URL(string: "https://lichess.org/api/puzzle/daily")!)
         let decoded = try JSONDecoder().decode(DailyPuzzleResponse.self, from: data)
-        return Puzzle(rating: decoded.puzzle.rating, themes: decoded.puzzle.themes)
+        let themes = decoded.puzzle.themes.prefix(4).joined(separator: ", ")
+        let detail = themes.isEmpty ? "rating \(decoded.puzzle.rating)"
+                                    : "rating \(decoded.puzzle.rating) · \(themes)"
+        return Puzzle(title: "Daily puzzle", detail: detail, url: "https://lichess.org/training/daily")
+    }
+
+    // MARK: chess.com puzzle
+
+    private struct ChessComPuzzleResponse: Decodable {
+        let title: String
+        let url: String
+    }
+
+    static func chessComPuzzle() async throws -> Puzzle {
+        let data = try await get(URL(string: "https://api.chess.com/pub/puzzle")!, userAgent: userAgent)
+        let decoded = try JSONDecoder().decode(ChessComPuzzleResponse.self, from: data)
+        let detail = decoded.title.isEmpty ? "today's puzzle" : decoded.title
+        return Puzzle(title: "Daily puzzle", detail: detail, url: decoded.url)
     }
 
     private struct BroadcastLine: Decodable {

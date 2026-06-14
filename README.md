@@ -12,13 +12,14 @@ and your chess heroes, one click away, all day. No accounts, no keys, no trackin
 
 </div>
 
-**jugada** — Spanish for *"the move."* It puts a crown ♔ in your menu bar; click it and the
-board unfolds: today's [lichess](https://lichess.org) puzzle with its rating and themes, the
-official broadcasts playing right now, when your favorite players were last online, and a
-one-click ticket to Lichess TV. Everything opens in your browser. The menu refreshes itself
-every five minutes. No login, nothing to configure to start. Part of a small family —
-sibling of [narrado](https://github.com/SethMed7/narrado) and
-[leelo](https://github.com/SethMed7/leelo) — same craft, a different board.
+**jugada** — Spanish for *"the move."* It puts a crown ♔ in your menu bar; click it and a
+board-green panel unfolds: today's daily puzzle (from **lichess** or **chess.com**, your
+choice), the official broadcasts playing right now — with a notification when a new one goes
+live — when your favorite players were last online, and a one-click ticket to Lichess TV.
+Everything opens in your browser. It refreshes itself every five minutes. No login, nothing
+to configure to start. Part of a small family — sibling of
+[narrado](https://github.com/SethMed7/narrado) and [leelo](https://github.com/SethMed7/leelo)
+— same craft, a different board.
 
 ## How it works
 
@@ -26,13 +27,16 @@ sibling of [narrado](https://github.com/SethMed7/narrado) and
 
 ## Features
 
-- **Daily puzzle** — rating and themes at a glance; one click opens
-  [lichess training](https://lichess.org/training/daily)
+- **Daily puzzle** — from **lichess** (rating + themes) or **chess.com**, your choice in
+  `~/.jugada/config.json`; one click opens it
 - **Live events** — up to five official lichess broadcasts (Tata Steel, Norway Chess…),
   each one click from the live board
+- **Live-event alerts** — a macOS notification the moment a new broadcast goes live; click
+  the banner to jump straight to the board
 - **Heroes** — your favorite chess.com players and when they were last seen; choose them
   in `~/.jugada/config.json`
 - **Watch Lichess TV** — the best game on lichess, instantly
+- **A themed panel** — board-green with brass-gold highlights, not a plain system menu
 - **Self-refreshing** — every 5 minutes, plus a manual **Refresh**; each section degrades
   gracefully when you're offline
 - **Private by design** — no accounts, no keys, no tracking; talks only to `lichess.org`
@@ -46,11 +50,20 @@ sibling of [narrado](https://github.com/SethMed7/narrado) and
 2. That's it — **no permissions to grant.** jugada talks only to `lichess.org` and
    `api.chess.com`.
 
-To follow your own heroes, edit `~/.jugada/config.json` (created on first run):
+On first run, the first time a new broadcast goes live you'll get a **notification**; macOS
+asks for permission once.
+
+To follow your own heroes — or switch the puzzle source — edit `~/.jugada/config.json`
+(created on first run):
 
 ```json
-{ "heroes": ["magnuscarlsen", "hikaru"] }
+{
+  "heroes": ["magnuscarlsen", "hikaru"],
+  "puzzleSource": "lichess"
+}
 ```
+
+Set `"puzzleSource"` to `"chess.com"` to use chess.com's daily puzzle instead of lichess.
 
 ## Development
 

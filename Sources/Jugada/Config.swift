@@ -3,8 +3,11 @@ import Foundation
 /// User config at ~/.jugada/config.json — created with defaults on first run.
 struct Config: Codable {
     var heroes: [String]
+    /// Daily-puzzle source: "lichess" (default) or "chess.com". Optional so older
+    /// config files without the key still decode.
+    var puzzleSource: String?
 
-    static let defaults = Config(heroes: ["magnuscarlsen", "hikaru"])
+    static let defaults = Config(heroes: ["magnuscarlsen", "hikaru"], puzzleSource: "lichess")
 
     static var fileURL: URL {
         FileManager.default.homeDirectoryForCurrentUser
