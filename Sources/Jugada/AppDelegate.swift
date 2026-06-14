@@ -20,7 +20,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCent
 
         // Route the themed panel's taps back to AppKit.
         model.onOpen = { [weak self] urlString in
-            if let url = URL(string: urlString) { NSWorkspace.shared.open(url) }
+            self?.openLink(urlString)
             self?.popover.performClose(nil)
         }
         model.onRefresh = { [weak self] in self?.refresh() }
@@ -62,6 +62,21 @@ final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCent
         }
     }
 
+    /// Open in the default web browser explicitly. Plain `NSWorkspace.open` lets
+    /// an app that claims a domain's universal links (e.g. the chess.com app)
+    /// hijack the link; we resolve the browser via a neutral domain and open
+    /// there so every jugada link lands in the browser, as documented.
+    private func openLink(_ urlString: String) {
+        guard let url = URL(string: urlString) else { return }
+        if let probe = URL(string: "https://example.com"),
+           let browser = NSWorkspace.shared.urlForApplication(toOpen: probe) {
+            NSWorkspace.shared.open([url], withApplicationAt: browser,
+                                    configuration: NSWorkspace.OpenConfiguration())
+        } else {
+            NSWorkspace.shared.open(url)
+        }
+    }
+
     @objc func refresh() {
         guard !isRefreshing else { return }
         isRefreshing = true
@@ -81,9 +96,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCent
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
-        if let urlString = response.notification.request.content.userInfo["url"] as? String,
-           let url = URL(string: urlString) {
-            NSWorkspace.shared.open(url)
+        if let urlString = response.notification.request.content.userInfo["url"] as? String {
+            openLink(urlString)
         }
         completionHandler()
     }

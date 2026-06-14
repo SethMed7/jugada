@@ -45,7 +45,7 @@ func checkText(_ snapshot: Snapshot) -> String {
 }
 
 if CommandLine.arguments.contains("--version") {
-    print("0.1.3")
+    print("0.1.4")
     exit(0)
 }
 
