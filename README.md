@@ -27,8 +27,8 @@ to configure to start. Part of a small family — sibling of
 
 ## Features
 
-- **Daily puzzle** — from **lichess** (rating + themes) or **chess.com**, your choice in
-  `~/.jugada/config.json`; one click opens it
+- **Daily puzzle** — from **lichess** (rating + themes) or **chess.com**; flip the source
+  right in the panel (a **Puzzle** toggle near the bottom); one click opens it
 - **Live events** — up to five official lichess broadcasts (Tata Steel, Norway Chess…),
   each one click from the live board
 - **Live-event alerts** — a macOS notification the moment a new broadcast goes live; click
@@ -63,7 +63,8 @@ To follow your own heroes — or switch the puzzle source — edit `~/.jugada/co
 }
 ```
 
-Set `"puzzleSource"` to `"chess.com"` to use chess.com's daily puzzle instead of lichess.
+Set `"puzzleSource"` to `"chess.com"` to use chess.com's daily puzzle instead of lichess —
+or just use the **Puzzle** toggle near the bottom of the panel, which writes this for you.
 
 ## Development
 

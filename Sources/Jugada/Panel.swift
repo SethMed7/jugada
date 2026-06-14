@@ -4,9 +4,11 @@ import SwiftUI
 /// the closures route row taps back to AppKit (open URL / refresh / quit).
 final class PanelModel: ObservableObject {
     @Published var snapshot: Snapshot?
+    @Published var puzzleSource: String = "lichess"   // drives the settings toggle
     var onOpen: (String) -> Void = { _ in }
     var onRefresh: () -> Void = {}
     var onQuit: () -> Void = {}
+    var onSetPuzzleSource: (String) -> Void = { _ in }
 }
 
 // jugada brand: brass gold on deep board-green.
@@ -44,6 +46,8 @@ struct PanelView: View {
                 divider
                 Row(title: "Watch Lichess TV") { model.onOpen("https://lichess.org/tv") }
                 divider
+                settingsRow
+                divider
                 Row(title: "Refresh") { model.onRefresh() }
                 Row(title: "Quit Jugada") { model.onQuit() }
             }
@@ -55,6 +59,21 @@ struct PanelView: View {
 
     private var divider: some View {
         Rectangle().fill(Color.jBorder.opacity(0.55)).frame(height: 1).padding(.horizontal, 4).padding(.vertical, 4)
+    }
+
+    private var isLichess: Bool {
+        let s = model.puzzleSource.lowercased()
+        return s != "chess.com" && s != "chesscom"
+    }
+
+    private var settingsRow: some View {
+        HStack(spacing: 7) {
+            Text("Puzzle").font(.system(size: 12.5)).foregroundColor(.jSage)
+            Spacer(minLength: 8)
+            SourceChip(label: "lichess", selected: isLichess) { model.onSetPuzzleSource("lichess") }
+            SourceChip(label: "chess.com", selected: !isLichess) { model.onSetPuzzleSource("chess.com") }
+        }
+        .padding(.horizontal, 10).padding(.vertical, 5)
     }
 
     @ViewBuilder private var puzzleRow: some View {
@@ -135,5 +154,31 @@ private struct Row: View {
         .contentShape(Rectangle())
         .onHover { if enabled { hover = $0 } }
         .onTapGesture { if enabled { action() } }
+    }
+}
+
+/// A pill in the puzzle-source toggle; the selected source is filled gold.
+private struct SourceChip: View {
+    let label: String
+    let selected: Bool
+    let action: () -> Void
+    @State private var hover = false
+
+    var body: some View {
+        Text(label)
+            .font(.system(size: 12, weight: selected ? .semibold : .regular))
+            .foregroundColor(selected ? .jBg : (hover ? .jCream : .jSage))
+            .padding(.horizontal, 11).padding(.vertical, 4)
+            .background(
+                RoundedRectangle(cornerRadius: 6)
+                    .fill(selected ? Color.jGold : (hover ? Color.jBorder.opacity(0.45) : Color.clear))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 6)
+                    .stroke(selected ? Color.clear : Color.jBorder, lineWidth: 1)
+            )
+            .contentShape(Rectangle())
+            .onHover { hover = $0 }
+            .onTapGesture { action() }
     }
 }

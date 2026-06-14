@@ -24,13 +24,22 @@ struct Config: Codable {
         return (try? JSONDecoder().decode(Config.self, from: data)) ?? defaults
     }
 
-    private static func writeDefaults() {
+    /// Persist a new puzzle source (from the panel's settings), keeping heroes.
+    static func setPuzzleSource(_ source: String) {
+        var config = load()
+        config.puzzleSource = source
+        write(config)
+    }
+
+    private static func writeDefaults() { write(defaults) }
+
+    private static func write(_ config: Config) {
         let url = fileURL
         try? FileManager.default.createDirectory(at: url.deletingLastPathComponent(),
                                                  withIntermediateDirectories: true)
         let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
-        if let data = try? encoder.encode(defaults) {
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        if let data = try? encoder.encode(config) {
             try? data.write(to: url)
         }
     }

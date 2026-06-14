@@ -25,6 +25,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCent
         }
         model.onRefresh = { [weak self] in self?.refresh() }
         model.onQuit = { NSApp.terminate(nil) }
+        model.puzzleSource = Config.load().puzzleSource ?? "lichess"
+        model.onSetPuzzleSource = { [weak self] source in
+            Config.setPuzzleSource(source)
+            self?.model.puzzleSource = source
+            self?.refresh()
+        }
 
         popover.behavior = .transient
         popover.animates = true
