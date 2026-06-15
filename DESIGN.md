@@ -234,6 +234,41 @@ model code yet.
 
 ---
 
+## Configuring a watch by hand (Slice 1b — shipped)
+
+Until the friendly "Add a watch" UI lands (1c), generic watches are added to
+`~/.jugada/config.json` as a `watchers` array. Each entry is one `Watcher`. Example —
+notify when Bitcoin drops below $60k:
+
+```json
+{
+  "heroes": ["magnuscarlsen", "hikaru"],
+  "source": "chess.com",
+  "watchers": [
+    {
+      "name": "Bitcoin",
+      "source": { "url": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd" },
+      "extract": { "path": "bitcoin.usd" },
+      "rule": { "type": "below", "value": 60000 },
+      "display": { "title": "Bitcoin", "detail": "{value} USD" }
+    }
+  ]
+}
+```
+
+- `extract.path` is a dot-path into the JSON: object keys and array indices both work
+  (e.g. `rows.0.score`).
+- `rule.type` is `above` / `below` / `equals` (each needs `value`) or `changes` (no value).
+  Rules are edge-triggered and silently seeded on first poll — no banner storm at launch.
+- **Numeric values only** in 1b (price / count / rating); string and array (`appears`)
+  sources come later. A failed or non-numeric fetch shows an offline row and never notifies.
+- `display.detail` may contain `{value}`, replaced with the current reading. `display.link`
+  is optional (the row opens it on click).
+
+Watches show in the panel below the chess skin and in `Jugada --check`. They run through
+the same engine as chess, so they're equally local-first: knight calls only the URL you put
+in `source.url`.
+
 ## What changes vs. what stays
 
 - **Stays:** the timer loop, fail-soft per-section snapshots, the themed panel + `Row`,

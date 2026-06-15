@@ -121,6 +121,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCent
             let result = await engine.refresh()
             await MainActor.run {
                 self.model.snapshot = result.chess
+                self.model.watcherSections = result.sections.filter { $0.id.hasPrefix("watch.") }
                 self.isRefreshing = false
             }
         }

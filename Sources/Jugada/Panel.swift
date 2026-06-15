@@ -4,6 +4,7 @@ import SwiftUI
 /// the closures route row taps back to AppKit (open URL / refresh / quit).
 final class PanelModel: ObservableObject {
     @Published var snapshot: Snapshot?
+    @Published var watcherSections: [WatchSection] = []   // generic, non-chess watches
     @Published var source: String = "lichess"   // drives the source toggle (whole app)
     var onOpen: (String) -> Void = { _ in }
     var onRefresh: () -> Void = {}
@@ -47,6 +48,7 @@ struct PanelView: View {
                 Row(title: isLichess ? "Watch Lichess TV" : "Watch chess.com TV") {
                     model.onOpen(isLichess ? "https://lichess.org/tv" : "https://www.chess.com/tv")
                 }
+                watcherArea
                 divider
                 settingsRow
                 divider
@@ -66,6 +68,20 @@ struct PanelView: View {
     private var isLichess: Bool {
         let s = model.source.lowercased()
         return s != "chess.com" && s != "chesscom"
+    }
+
+    /// Generic watch sections, rendered below the chess skin — only when present, so a user
+    /// with no watches sees exactly today's panel.
+    @ViewBuilder private var watcherArea: some View {
+        ForEach(Array(model.watcherSections.enumerated()), id: \.offset) { _, section in
+            divider
+            Header(section.title)
+            ForEach(Array(section.items.enumerated()), id: \.offset) { _, item in
+                Row(title: item.title, detail: item.detail, dot: item.dot, enabled: item.url != nil) {
+                    if let url = item.url { model.onOpen(url) }
+                }
+            }
+        }
     }
 
     private var settingsRow: some View {

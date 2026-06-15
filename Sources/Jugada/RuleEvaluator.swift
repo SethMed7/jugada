@@ -20,7 +20,7 @@ public struct PendingNotification {
 ///
 /// All state lives in `UserDefaults`; nothing leaves the machine.
 public enum RuleEvaluator {
-    public static func evaluate(_ sections: [Section]) -> [PendingNotification] {
+    public static func evaluate(_ sections: [WatchSection]) -> [PendingNotification] {
         let ud = UserDefaults.standard
         var pending: [PendingNotification] = []
 

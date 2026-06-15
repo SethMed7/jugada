@@ -1,7 +1,7 @@
 import Foundation
 
 /// Chess — the flagship connector and the default skin. It wraps the existing chess fetch
-/// (`Feeds.snapshot()`, unchanged) and maps the typed `Snapshot` into generic `[Section]`
+/// (`Feeds.snapshot()`, unchanged) and maps the typed `Snapshot` into generic `[WatchSection]`
 /// for the notification path. The typed `Snapshot` itself is handed straight to the panel
 /// by the `Engine`, so the chess skin renders exactly as it does today — a skin is allowed
 /// a richer concrete output than a generic connector.
@@ -16,7 +16,7 @@ public final class ChessConnector: Connector {
 
     public init() {}
 
-    public func poll() async -> [Section] {
+    public func poll() async -> [WatchSection] {
         sections(from: await fetch())
     }
 
@@ -26,11 +26,11 @@ public final class ChessConnector: Connector {
         await Feeds.snapshot()
     }
 
-    public func sections(from snapshot: Snapshot) -> [Section] {
-        var out: [Section] = []
+    public func sections(from snapshot: Snapshot) -> [WatchSection] {
+        var out: [WatchSection] = []
 
         if case .success(let puzzle) = snapshot.puzzle {
-            out.append(Section(id: "chess.puzzle", title: "Puzzle",
+            out.append(WatchSection(id: "chess.puzzle", title: "Puzzle",
                                items: [Item(title: puzzle.title, detail: puzzle.detail, url: puzzle.url)],
                                notify: .off))
         }
@@ -39,14 +39,14 @@ public final class ChessConnector: Connector {
         // the seen-set is never overwritten (matching today, where a failed fetch skips notify).
         if case .success(let tours) = snapshot.broadcasts {
             let notify: Notify = source == .lichess ? .appears(newItemTitle: "New live event") : .off
-            out.append(Section(id: "chess.broadcasts",
+            out.append(WatchSection(id: "chess.broadcasts",
                                title: source == .lichess ? "Live events" : "Live streamers",
                                items: tours.map { Item(title: $0.name, url: $0.url, dot: true, identity: $0.url) },
                                notify: notify))
         }
 
         if case .success(let heroes) = snapshot.heroes {
-            out.append(Section(id: "chess.heroes", title: "Heroes",
+            out.append(WatchSection(id: "chess.heroes", title: "Heroes",
                                items: heroes.map { Item(title: $0.username, detail: $0.status, url: $0.url) },
                                notify: .off))
         }

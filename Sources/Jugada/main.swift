@@ -59,6 +59,13 @@ if CommandLine.arguments.contains("--check") {
     Task.detached {
         let snapshot = await Feeds.snapshot()
         print(checkText(snapshot))
+        // Generic watches (Config.watchers); read-only — no rule eval, no notifications.
+        let watcherSections = await GenericJSONConnector().poll()
+        for section in watcherSections {
+            print("\(section.title):")
+            for item in section.items { print("  \(item.title) · \(item.detail ?? "")") }
+        }
+        // Exit code stays chess-based, preserving the original --check contract.
         let allFailed = sectionFailed(snapshot.puzzle)
             && sectionFailed(snapshot.broadcasts)
             && sectionFailed(snapshot.heroes)

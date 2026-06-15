@@ -1,12 +1,12 @@
 import Foundation
 
-// MARK: - Section / Item (the generic render + notify unit)
+// MARK: - WatchSection / Item (the generic render + notify unit)
 //
-// Every connector produces `[Section]`. In Slice 1a only the notify path consumes these
+// Every connector produces `[WatchSection]`. In Slice 1a only the notify path consumes these
 // (the chess panel still renders from the typed `Snapshot`); generic panel rendering and
 // the JSON connector arrive in 1b.
 
-public struct Section {
+public struct WatchSection {
     public var id: String          // stable, e.g. "chess.broadcasts" — keys the seen/last-value store
     public var title: String
     public var items: [Item]
