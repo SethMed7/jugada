@@ -44,7 +44,9 @@ struct PanelView: View {
                 Header("Heroes")
                 heroesRows
                 divider
-                Row(title: "Watch Lichess TV") { model.onOpen("https://lichess.org/tv") }
+                Row(title: isLichess ? "Watch Lichess TV" : "Watch chess.com TV") {
+                    model.onOpen(isLichess ? "https://lichess.org/tv" : "https://www.chess.com/tv")
+                }
                 divider
                 settingsRow
                 divider
@@ -90,7 +92,7 @@ struct PanelView: View {
             ForEach(Array(tours.enumerated()), id: \.offset) { _, tour in
                 Row(title: tour.name, dot: true) { model.onOpen(tour.url) }
             }
-        case .success: Row(title: "No live events", enabled: false) {}
+        case .success: Row(title: isLichess ? "No live events" : "No live streamers", enabled: false) {}
         case .failure: Row(title: "— offline", enabled: false) {}
         case .none: Row(title: "Loading…", enabled: false) {}
         }

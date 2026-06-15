@@ -117,7 +117,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCent
             let snapshot = await Feeds.snapshot()
             await MainActor.run {
                 self.model.snapshot = snapshot
-                if case .success(let tours) = snapshot.broadcasts { Notifier.handle(tours) }
+                if case .success(let tours) = snapshot.broadcasts {
+                    Notifier.handle(source: Source.from(self.model.source), tours)
+                }
                 self.isRefreshing = false
             }
         }

@@ -2,8 +2,8 @@ import Foundation
 import UserNotifications
 
 /// Local notifications for new live events. Each refresh diffs the current
-/// broadcasts against what we saw last time; anything new gets a banner. The
-/// first successful fetch seeds the seen-set silently, so we don't fanfare
+/// lichess broadcasts against what we saw last time; anything new gets a banner.
+/// The first successful fetch seeds the seen-set silently, so we don't fanfare
 /// every event that was already running when the app launched.
 enum Notifier {
     private static let seenKey = "jugada.seenBroadcasts"
@@ -13,7 +13,12 @@ enum Notifier {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, _ in }
     }
 
-    static func handle(_ broadcasts: [Broadcast]) {
+    static func handle(source: Source, _ broadcasts: [Broadcast]) {
+        // Only lichess broadcasts are notification-worthy "events". chess.com's
+        // live section is streamers, which come and go constantly — notifying on
+        // those would be noise, and would fire a burst every time the source is
+        // switched. So we leave the lichess seen-set untouched while on chess.com.
+        guard source == .lichess else { return }
         let ud = UserDefaults.standard
         let seen = Set(ud.stringArray(forKey: seenKey) ?? [])
         if ud.bool(forKey: seededKey) {
