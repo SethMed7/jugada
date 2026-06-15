@@ -8,6 +8,9 @@ struct Config: Codable {
     var source: String?
     /// Legacy key from when only the puzzle had a source; read as a fallback.
     var puzzleSource: String?
+    /// Generic, non-chess watches (Slice 1b consumes these). Optional + defaulted so old
+    /// config files decode unchanged, and a nil value is omitted on write.
+    var watchers: [Watcher]? = nil
 
     /// Resolved source, honoring the legacy `puzzleSource` key.
     var effectiveSource: String { source ?? puzzleSource ?? "lichess" }

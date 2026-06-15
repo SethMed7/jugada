@@ -8,6 +8,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCent
     private var isRefreshing = false // main-thread only; guards overlapping refreshes
     private let popover = NSPopover()
     private let model = PanelModel()
+    private let engine = Engine()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
@@ -24,10 +25,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCent
         }
         model.onRefresh = { [weak self] in self?.refresh() }
         model.onQuit = { NSApp.terminate(nil) }
-        model.source = Config.load().effectiveSource
+        let cfg = Config.load()
+        model.source = cfg.effectiveSource
+        engine.chess.source = Source.from(cfg.effectiveSource)
         model.onSetSource = { [weak self] value in
             Config.setSource(value)
             self?.model.source = value
+            self?.engine.chess.source = Source.from(value)
             self?.refresh()
         }
 
@@ -114,12 +118,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCent
         guard !isRefreshing else { return }
         isRefreshing = true
         Task {
-            let snapshot = await Feeds.snapshot()
+            let result = await engine.refresh()
             await MainActor.run {
-                self.model.snapshot = snapshot
-                if case .success(let tours) = snapshot.broadcasts {
-                    Notifier.handle(source: Source.from(self.model.source), tours)
-                }
+                self.model.snapshot = result.chess
                 self.isRefreshing = false
             }
         }
