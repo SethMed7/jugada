@@ -12,8 +12,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCent
     func applicationDidFinishLaunching(_ notification: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         if let button = statusItem.button {
-            button.image = NSImage(systemSymbolName: "crown", accessibilityDescription: "knight")
-                ?? NSImage(systemSymbolName: "circle.grid.3x3", accessibilityDescription: "knight")
+            button.image = AppDelegate.knightImage()
             button.action = #selector(togglePopover)
             button.target = self
         }
@@ -49,6 +48,40 @@ final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCent
         timer = t
 
         refresh()
+    }
+
+    // The menu-bar icon is the knight itself (the same silhouette as the app
+    // icon), drawn as a template so macOS tints it to the menu bar. Focus on
+    // the horse — no generic crown symbol.
+    private static func knightImage() -> NSImage {
+        let image = NSImage(size: NSSize(width: 18, height: 18), flipped: true) { _ in
+            let scale = NSAffineTransform()
+            scale.scale(by: 18.0 / 256.0)
+            scale.concat()
+            let body = NSBezierPath()
+            body.move(to: NSPoint(x: 100, y: 178))
+            body.curve(to: NSPoint(x: 88, y: 116), controlPoint1: NSPoint(x: 100, y: 144), controlPoint2: NSPoint(x: 106, y: 124))
+            body.line(to: NSPoint(x: 68, y: 122))
+            body.curve(to: NSPoint(x: 58, y: 104), controlPoint1: NSPoint(x: 56, y: 124), controlPoint2: NSPoint(x: 50, y: 112))
+            body.line(to: NSPoint(x: 94, y: 78))
+            body.curve(to: NSPoint(x: 124, y: 50), controlPoint1: NSPoint(x: 98, y: 62), controlPoint2: NSPoint(x: 110, y: 52))
+            body.line(to: NSPoint(x: 132, y: 36))
+            body.line(to: NSPoint(x: 146, y: 52))
+            body.curve(to: NSPoint(x: 188, y: 130), controlPoint1: NSPoint(x: 172, y: 62), controlPoint2: NSPoint(x: 188, y: 94))
+            body.curve(to: NSPoint(x: 180, y: 178), controlPoint1: NSPoint(x: 188, y: 150), controlPoint2: NSPoint(x: 184, y: 164))
+            body.close()
+            body.lineWidth = 14
+            body.lineJoinStyle = .round
+            body.lineCapStyle = .round
+            NSColor.black.setFill()
+            NSColor.black.setStroke()
+            body.fill()
+            body.stroke()
+            NSBezierPath(roundedRect: NSRect(x: 62, y: 198, width: 132, height: 18), xRadius: 9, yRadius: 9).fill()
+            return true
+        }
+        image.isTemplate = true
+        return image
     }
 
     @objc private func togglePopover() {

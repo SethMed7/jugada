@@ -12,7 +12,7 @@ and your chess heroes, one click away, all day. No accounts, no keys, no trackin
 
 </div>
 
-**knight** — the piece that doesn't move in straight lines. It puts a crown ♔ in your menu
+**knight** — the piece that doesn't move in straight lines. It puts a knight ♞ in your menu
 bar; click it and a board-green panel unfolds: today's daily puzzle (from **lichess** or
 **chess.com**, your choice), the official broadcasts playing right now — with a notification
 when a new one goes live — your favorite players' status, and a one-click ticket to Lichess
