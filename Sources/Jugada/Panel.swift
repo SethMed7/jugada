@@ -28,7 +28,7 @@ struct PanelView: View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 9) {
                 Text("\u{265E}").font(.system(size: 17)).foregroundColor(.jGold)
-                Text("jugada").font(.system(size: 18, weight: .semibold, design: .serif)).foregroundColor(.jCream)
+                Text("knight").font(.system(size: 18, weight: .semibold, design: .serif)).foregroundColor(.jCream)
                 Spacer()
             }
             .padding(.horizontal, 14).padding(.top, 12).padding(.bottom, 8)
@@ -49,7 +49,7 @@ struct PanelView: View {
                 settingsRow
                 divider
                 Row(title: "Refresh") { model.onRefresh() }
-                Row(title: "Quit Jugada") { model.onQuit() }
+                Row(title: "Quit knight") { model.onQuit() }
             }
             .padding(8)
         }

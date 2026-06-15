@@ -1,11 +1,12 @@
 #!/bin/sh
-# Builds Jugada.app from the SwiftPM executable — no Xcode project needed.
+# Builds Knight.app from the SwiftPM executable — no Xcode project needed.
+# (The repo, bundle id, and config stay "jugada" under the hood; the product is "knight".)
 set -e
 cd "$(dirname "$0")/.."
 
 swift build -c release
 
-APP="build/Jugada.app"
+APP="build/Knight.app"
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp .build/release/Jugada "$APP/Contents/MacOS/Jugada"

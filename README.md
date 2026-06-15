@@ -1,6 +1,6 @@
 <div align="center">
 
-![jugada — your chess world, one menu away.](assets/banner.png)
+![knight — your chess world, one menu away.](assets/banner.png)
 
 **A tiny chess companion for the macOS menu bar** — the daily puzzle, live broadcasts,
 and your chess heroes, one click away, all day. No accounts, no keys, no tracking.
@@ -12,18 +12,18 @@ and your chess heroes, one click away, all day. No accounts, no keys, no trackin
 
 </div>
 
-**jugada** — Spanish for *"the move."* It puts a crown ♔ in your menu bar; click it and a
-board-green panel unfolds: today's daily puzzle (from **lichess** or **chess.com**, your
-choice), the official broadcasts playing right now — with a notification when a new one goes
-live — when your favorite players were last online, and a one-click ticket to Lichess TV.
-Everything opens in your browser. It refreshes itself every five minutes. No login, nothing
-to configure to start. Part of a small family — sibling of
+**knight** — the piece that doesn't move in straight lines. It puts a crown ♔ in your menu
+bar; click it and a board-green panel unfolds: today's daily puzzle (from **lichess** or
+**chess.com**, your choice), the official broadcasts playing right now — with a notification
+when a new one goes live — your favorite players' status, and a one-click ticket to Lichess
+TV. Everything opens in your browser. It refreshes itself every five minutes. No login,
+nothing to configure to start. Part of a small family — sibling of
 [narrado](https://github.com/SethMed7/narrado) and [leelo](https://github.com/SethMed7/leelo)
 — same craft, a different board.
 
 ## How it works
 
-![the jugada menu — daily puzzle, live events, heroes, lichess tv](assets/menu.png)
+![the knight menu — daily puzzle, live events, heroes, lichess tv](assets/menu.png)
 
 ## Features
 
@@ -46,11 +46,14 @@ to configure to start. Part of a small family — sibling of
 
 ## Install
 
-1. Download `Jugada-x.y.z.zip` from [Releases](https://github.com/SethMed7/jugada/releases/latest),
-   unzip, drag **Jugada.app** to Applications, and open it. The app is ad-hoc signed; if macOS
-   complains, run `xattr -dr com.apple.quarantine /Applications/Jugada.app` (or right-click → Open).
-2. That's it — **no permissions to grant.** jugada talks only to `lichess.org` and
+1. Download `Knight-x.y.z.zip` from [Releases](https://github.com/SethMed7/jugada/releases/latest),
+   unzip, drag **Knight.app** to Applications, and open it. The app is ad-hoc signed; if macOS
+   complains, run `xattr -dr com.apple.quarantine /Applications/Knight.app` (or right-click → Open).
+2. That's it — **no permissions to grant.** knight talks only to `lichess.org` and
    `api.chess.com`.
+
+> The project still lives at **github.com/SethMed7/jugada** (the repo, bundle id, and
+> `~/.jugada` config keep their original name); the app you run is **knight**.
 
 On first run, the first time a new broadcast goes live you'll get a **notification**; macOS
 asks for permission once.
@@ -73,8 +76,8 @@ on the active platform, so list each player's lichess / chess.com handle accordi
 
 ```sh
 swift build              # debug build
-sh scripts/bundle.sh     # release build -> build/Jugada.app (no Xcode project needed)
-./build/Jugada.app/Contents/MacOS/Jugada --check   # headless snapshot of all sections
+sh scripts/bundle.sh     # release build -> build/Knight.app (no Xcode project needed)
+./build/Knight.app/Contents/MacOS/Jugada --check   # headless snapshot of all sections
 ```
 
 Brand assets are authored as HTML/SVG in `assets/` and rendered with
@@ -85,7 +88,7 @@ Brand assets are authored as HTML/SVG in `assets/` and rendered with
 MIT
 
 <div align="center">
-<sub>♞ <b>jugada</b> · brass on board-green · your chess world, one menu away · part of the
+<sub>♞ <b>knight</b> · brass on board-green · your chess world, one menu away · part of the
 family: <a href="https://github.com/SethMed7/narrado">narrado</a> ·
 <a href="https://github.com/SethMed7/leelo">leelo</a> ·
 <a href="https://github.com/SethMed7/dictado">dictado</a></sub>

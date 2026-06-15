@@ -12,8 +12,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCent
     func applicationDidFinishLaunching(_ notification: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         if let button = statusItem.button {
-            button.image = NSImage(systemSymbolName: "crown", accessibilityDescription: "Jugada")
-                ?? NSImage(systemSymbolName: "circle.grid.3x3", accessibilityDescription: "Jugada")
+            button.image = NSImage(systemSymbolName: "crown", accessibilityDescription: "knight")
+                ?? NSImage(systemSymbolName: "circle.grid.3x3", accessibilityDescription: "knight")
             button.action = #selector(togglePopover)
             button.target = self
         }

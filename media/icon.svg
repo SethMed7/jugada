@@ -1,9 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 256 256">
-  <!-- jugada: your chess world, one menu away. Classic chess-club elegance —
-       brass gold #DDA94A on deep board-green #12271C. Distinct from leelo
-       (warm/playful) and narrado (dark/terminal). Source of truth for icon.png. -->
+  <!-- knight: your chess world, one menu away. Classic chess-club elegance —
+       brass-gold #DDA94A knight on deep board-green #12271C. Distinct from leelo
+       (warm/playful) and narrado (dark/terminal). Source of truth for icon.png.
+       (Repo/bundle id/config stay "jugada" under the hood; the product is "knight".) -->
   <rect width="256" height="256" fill="#12271C"/>
-  <!-- knight silhouette; fill+stroke same color with round joins = rounded geometry -->
+  <!-- the knight — the horse — is the whole mark; fill+stroke + round joins = rounded geometry -->
   <path d="M100 178
            C 100 144 106 124 88 116
            L 68 122
