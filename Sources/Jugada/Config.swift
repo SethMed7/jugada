@@ -40,6 +40,13 @@ struct Config: Codable {
         write(config)
     }
 
+    /// Append a watch (from the "Add a watch" picker), keeping everything else.
+    static func addWatcher(_ watcher: Watcher) {
+        var config = load()
+        config.watchers = (config.watchers ?? []) + [watcher]
+        write(config)
+    }
+
     private static func writeDefaults() { write(defaults) }
 
     private static func write(_ config: Config) {

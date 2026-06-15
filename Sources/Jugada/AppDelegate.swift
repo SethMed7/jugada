@@ -9,6 +9,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCent
     private let popover = NSPopover()
     private let model = PanelModel()
     private let engine = Engine()
+    private var addWatchWindow: NSWindow?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
@@ -33,6 +34,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCent
             self?.model.source = value
             self?.engine.chess.source = Source.from(value)
             self?.refresh()
+        }
+        model.onAddWatch = { [weak self] in
+            self?.popover.performClose(nil)
+            self?.openAddWatch()
         }
 
         popover.behavior = .transient
@@ -97,6 +102,28 @@ final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCent
             popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
             refresh() // freshen the panel each time it opens
         }
+    }
+
+    /// Open the "Add a watch" picker in its own small window (the transient popover is too
+    /// narrow for a fetch-and-pick form). Recreated each time so it always starts fresh.
+    private func openAddWatch() {
+        addWatchWindow?.close()
+        let addModel = AddWatchModel()
+        addModel.onCancel = { [weak self] in self?.addWatchWindow?.close() }
+        addModel.onAdd = { [weak self] watcher in
+            Config.addWatcher(watcher)
+            self?.addWatchWindow?.close()
+            self?.refresh()   // surface the new watch immediately
+        }
+        let window = NSWindow(contentViewController: NSHostingController(rootView: AddWatchView(model: addModel)))
+        window.title = "Add a watch"
+        window.styleMask = [.titled, .closable]
+        window.isReleasedWhenClosed = false
+        if let dark = NSAppearance(named: .darkAqua) { window.appearance = dark }
+        window.center()
+        addWatchWindow = window
+        NSApp.activate(ignoringOtherApps: true)
+        window.makeKeyAndOrderFront(nil)
     }
 
     /// Open in the default web browser explicitly. Plain `NSWorkspace.open` lets

@@ -10,10 +10,11 @@ final class PanelModel: ObservableObject {
     var onRefresh: () -> Void = {}
     var onQuit: () -> Void = {}
     var onSetSource: (String) -> Void = { _ in }
+    var onAddWatch: () -> Void = {}
 }
 
-// jugada brand: brass gold on deep board-green.
-private extension Color {
+// jugada brand: brass gold on deep board-green. Shared by the panel and the add-watch picker.
+extension Color {
     static let jBg = Color(red: 0x12 / 255, green: 0x27 / 255, blue: 0x1C / 255)
     static let jGold = Color(red: 0xDD / 255, green: 0xA9 / 255, blue: 0x4A / 255)
     static let jCream = Color(red: 0xEC / 255, green: 0xE3 / 255, blue: 0xCF / 255)
@@ -49,6 +50,7 @@ struct PanelView: View {
                     model.onOpen(isLichess ? "https://lichess.org/tv" : "https://www.chess.com/tv")
                 }
                 watcherArea
+                Row(title: "+ Add a watch…") { model.onAddWatch() }
                 divider
                 settingsRow
                 divider

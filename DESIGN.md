@@ -224,10 +224,13 @@ shippable on its own:
   extracts, evaluates, emits sections that render in the panel and notify.
 - At this stage watchers can be added by hand-editing config — proves the engine end to end.
 
-**Slice 1c — the friendly "Add a watch" UI (the actual proof for non-tech users).**
-- Recipe gallery (start with Crypto via CoinGecko = no auth, RSS = universal, one stock).
-- The visual click-to-pick custom flow.
-- Both write `Watcher`s into config; no path typing anywhere.
+**Slice 1c — the friendly "Add a watch" UI (shipped: visual picker; recipes deferred).**
+- A "+ Add a watch…" row in the panel opens a small window: paste a JSON URL → knight
+  fetches it and lists the numeric values it found → click one (the dot-path is inferred, no
+  typing) → choose a plain-language rule (goes above / below / changes / equals) → name it →
+  Add. Writes a `Watcher` to config and refreshes.
+- The canned **recipe gallery** (Crypto / GitHub / etc.) is deferred — the custom picker is
+  the more general proof and covers any JSON API on its own.
 
 **Seams (in 1a):** the post-poll reasoning hook (no-op) and the `Watcher`-as-NL-target. No
 model code yet.

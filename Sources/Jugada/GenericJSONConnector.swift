@@ -77,16 +77,21 @@ public final class GenericJSONConnector: Connector {
     // MARK: fetch + extract
 
     static func fetchValue(_ watcher: Watcher) async -> Double? {
-        guard let url = URL(string: watcher.source.url) else { return nil }
+        guard let url = URL(string: watcher.source.url),
+              let data = await fetchData(from: url, headers: watcher.source.headers) else { return nil }
+        return extractNumber(from: data, path: watcher.extract.path)
+    }
+
+    /// The bare GET, shared with the "Add a watch" picker. Local-first: only the given URL,
+    /// a generic User-Agent, and any header the user supplied.
+    static func fetchData(from url: URL, headers: [String: String]?) async -> Data? {
         var request = URLRequest(url: url)
         request.timeoutInterval = timeout
         request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
-        for (key, value) in watcher.source.headers ?? [:] {
-            request.setValue(value, forHTTPHeaderField: key)
-        }
+        for (key, value) in headers ?? [:] { request.setValue(value, forHTTPHeaderField: key) }
         guard let (data, response) = try? await URLSession.shared.data(for: request),
               let http = response as? HTTPURLResponse, http.statusCode == 200 else { return nil }
-        return extractNumber(from: data, path: watcher.extract.path)
+        return data
     }
 
     /// Walk a dot-path into the JSON (object keys or array indices) and read the leaf as a
